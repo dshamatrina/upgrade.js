@@ -171,8 +171,8 @@ watch.cancelTimer();
 const TEMPLATE_TODO = document.querySelector('#tplToDoList').content;
 const TEMPLATE_LI = document.querySelector('#tplItem').content;
 
-function ToDoList() {
-    let container = document.body;
+function ToDoList(insertHere) {
+    let container =  insertHere || document.body;
 
     let template = TEMPLATE_TODO.cloneNode(true);
     template.querySelector('#buttonAdd').addEventListener('click', addTask);
@@ -194,4 +194,5 @@ function ToDoList() {
 }
 
 let toDo1 = new ToDoList();
-let toDo2 = new ToDoList();
+// create div.here in html
+let toDo2 = new ToDoList(document.querySelector('.here'));
