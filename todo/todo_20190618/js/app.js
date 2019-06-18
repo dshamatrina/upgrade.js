@@ -1,18 +1,24 @@
 function Events() {
     const LISTENERS = {};
 
-    return {
-        on(event, fn) {
-            LISTENERS.event = fn;
-        },
-        trigger(event) {
-            LISTENERS.event();
+    this.on = function(event, fn) {
+        if (!LISTENERS[event]) {
+            LISTENERS[event] = [];
         }
+        LISTENERS[event].push(fn);
+    }
+
+        // LISTENERS = { 
+    //   change: [render, fn2] // link to all fns
+    // }
+
+    this.trigger = function(event) {
+        LISTENERS[event].forEach(fn => fn());
     }
 }
 
 function Collection() {
-    const INSTANCE = this; // link to Collection
+    const INSTANCE = this;
     const LIST = [];
 
     Collection = function() {
@@ -21,13 +27,13 @@ function Collection() {
 
     this.add = function(string) {
         LIST.push(string);
-        this.trigger('added');
+        this.trigger('change');
     }
 
     this.remove = function(index) {
         LIST.splice(index, 1);
-        this.trigger('removed');
-    };
+        this.trigger('change');
+    }
 
     this.getList = function() {
         return LIST.slice();
@@ -72,10 +78,8 @@ function TODO () {
     }.bind(this));
 
     document.body.appendChild(TEMPLATE_CURRENT);
-    MODEL.on('added', render);
-    MODEL.on('removed', render);
+    MODEL.on('change', render);
 }
 
-TODO.prototype = new Events();
-
+new TODO();
 new TODO();
