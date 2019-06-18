@@ -25,7 +25,7 @@ http://learn.javascript.ru/instanceof
 */
 
 function Events() {
-    const LISTENERS = {}; //all functions that need to be called on change
+    const LISTENERS = {};
 
     return {
         on(event, fn) {
@@ -93,7 +93,7 @@ function TODO () {
     }.bind(this));
 
     document.body.appendChild(TEMPLATE_CURRENT);
-    MODEL.on('added', render); // MODEL.onChange(render); //subscribed to change
+    MODEL.on('added', render);
     MODEL.on('removed', render);
 }
 
