@@ -1,41 +1,42 @@
-/* Статьи:
-http://learn.javascript.ru/prototype
-http://learn.javascript.ru/new-prototype
-*/
-
-/* app.js
-[project] Это задача на создание Модели данных как отдельного класса в TODO.
-Функционал TODO не меняется.
-*/
-
-function Collection() {
-    const LIST = [];
-    const LISTENERS = []; //all functions that need to be called on change
-
-    function _change() {
-        LISTENERS.forEach(callback => callback());
-    };
+function Events() {
+    const LISTENERS = {};
 
     return {
-        add(string) {
-            LIST.push(string);
-            _change();
+        on(event, fn) {
+            LISTENERS.event = fn;
         },
-        remove(index) {
-            LIST.splice(index, 1);
-            _change();
-        },
-        getList() {
-            return LIST.slice();
-        },
-        onChange(fn) {
-            LISTENERS.push(fn);
+        trigger(event) {
+            LISTENERS.event();
         }
     }
 }
 
-function TODO () {
+function Collection() {
+    const INSTANCE = this; // link to Collection
+    const LIST = [];
 
+    Collection = function() {
+        return INSTANCE;
+    }
+
+    this.add = function(string) {
+        LIST.push(string);
+        this.trigger('added');
+    }
+
+    this.remove = function(index) {
+        LIST.splice(index, 1);
+        this.trigger('removed');
+    };
+
+    this.getList = function() {
+        return LIST.slice();
+    }
+}
+
+Collection.prototype = new Events();
+
+function TODO () {
     const MODEL = new Collection();
     const TEMPLATE_TODO = document.querySelector('#tplToDoList').content;
     const TEMPLATE_LI = document.querySelector('#tplItem').content;
@@ -71,7 +72,10 @@ function TODO () {
     }.bind(this));
 
     document.body.appendChild(TEMPLATE_CURRENT);
-    MODEL.onChange(render); //subscribed to change
+    MODEL.on('added', render);
+    MODEL.on('removed', render);
 }
+
+TODO.prototype = new Events();
 
 new TODO();

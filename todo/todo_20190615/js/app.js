@@ -1,47 +1,31 @@
-/* app.js
-1. [project] Перепиши TODO list так, чтобы класс коллекции с данными был синглтоном 
-и все TODO list на странице были синхронизированы - имели одинаковые данные.
-*/
+function Collection() {
+    const LIST = [];
+    const LISTENERS = []; //all functions that need to be called on change
 
-function Events() {
-    const LISTENERS = {};
+    function _change() {
+        LISTENERS.forEach(callback => callback());
+    };
 
     return {
-        on(event, fn) {
-            LISTENERS.event = fn;
+        add(string) {
+            LIST.push(string);
+            _change();
         },
-        trigger(event) {
-            LISTENERS.event();
+        remove(index) {
+            LIST.splice(index, 1);
+            _change();
+        },
+        getList() {
+            return LIST.slice();
+        },
+        onChange(fn) {
+            LISTENERS.push(fn);
         }
     }
 }
 
-function Collection() {
-    const INSTANCE = this; // link to Collection
-    const LIST = [];
-
-    Collection = function() {
-        return INSTANCE;
-    }
-
-    this.add = function(string) {
-        LIST.push(string);
-        this.trigger('added');
-    }
-
-    this.remove = function(index) {
-        LIST.splice(index, 1);
-        this.trigger('removed');
-    };
-
-    this.getList = function() {
-        return LIST.slice();
-    }
-}
-
-Collection.prototype = new Events();
-
 function TODO () {
+
     const MODEL = new Collection();
     const TEMPLATE_TODO = document.querySelector('#tplToDoList').content;
     const TEMPLATE_LI = document.querySelector('#tplItem').content;
@@ -77,10 +61,7 @@ function TODO () {
     }.bind(this));
 
     document.body.appendChild(TEMPLATE_CURRENT);
-    MODEL.on('added', render);
-    MODEL.on('removed', render);
+    MODEL.onChange(render); //subscribed to change
 }
-
-TODO.prototype = new Events();
 
 new TODO();
