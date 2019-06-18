@@ -128,7 +128,9 @@ function Watch() {
  */
 
     function setTimer() {
-        confirm(`Your ${this.timer} seconds are up!`) ? this.cancelTimer : this.setTimer(this.timer);
+        if (!confirm(`Your ${this.timer} seconds are up!`)) { 
+            this.setTimer(this.timer); 
+        }
     }
 
 /* @public method - triggers a message with a given time delay
