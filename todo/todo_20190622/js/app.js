@@ -1,81 +1,59 @@
-class Events {
-    #LISTENERS = {};
+import Collection from './collection.js';
 
-    on(event, fn) {
-        if (!this.#LISTENERS[event]) {
-            this.#LISTENERS[event] = [];
-        }
-        this.#LISTENERS[event].push(fn);
-    }
+class TODO {
 
-    trigger(event) {
-        this.#LISTENERS[event].forEach(fn => fn());
-    }
-}
+    static templateToDo = document.querySelector('#tplToDoList').content;
+    static templateItem = document.querySelector('#tplItem').content;
 
-class Collection extends Events {
-    #INSTANCE = this;
-    #LIST = [];
+    #model = new Collection();
 
-    static get Collection() {
-        return this.#INSTANCE;
-    }
-
-    add(string) {
-        this.#LIST.push(string);
-        this.trigger('change');
-    }
-
-    remove(index) {
-        this.#LIST.splice(index, 1);
-        this.trigger('change');
-    }
-
-    getList() {
-        return this.#LIST.slice();
-    }
-}
-
-class TODO extends Events {
-    #MODEL = new Collection();
-    #TEMPLATE_TODO = document.querySelector('#tplToDoList').content;
-    #TEMPLATE_LI = document.querySelector('#tplItem').content;
-
-    #TEMPLATE_CURRENT = this.#TEMPLATE_TODO.cloneNode('true');
-
-    #TASK_VALUE = this.#TEMPLATE_CURRENT.querySelector('#taskValue');
-    #TASKS = this.#TEMPLATE_CURRENT.querySelector('#tasksIncompleted')
-
-    #render = function() {
-        this.#TASKS.innerHTML = '';
-        this.#MODEL.getList().forEach((el, i) => {
-            const TEMPLATE_CURRENT = this.#TEMPLATE_LI.cloneNode(true);
-            TEMPLATE_CURRENT.querySelector('._text').innerText = el;
-            TEMPLATE_CURRENT.querySelector('._li').dataset.index = i;
-            this.#TASKS.appendChild(TEMPLATE_CURRENT);
-        });
-    }
-
-    addTask(){
-        this.#MODEL.add(this.#TASK_VALUE.value);
-    };
-
-    removeTask(index) {
-        this.#MODEL.remove(index);
-    };
+    // root element of template
+    #root = null;
 
     constructor() {
-        super();
-        this.#TEMPLATE_CURRENT.querySelector('#buttonAdd').addEventListener('click', this.addTask.bind(this));
-        this.#TASKS.addEventListener('click', function(e) {
+
+        const template = TODO.templateToDo.cloneNode('true');
+
+        this.#root = template.querySelector('._root');
+        this._eventsAssign()
+            ._render(template);
+    }
+
+    _eventsAssign() {
+        // TODO: rewrite events assign
+        this.#root.querySelector('#buttonAdd').addEventListener('click', this.addTask.bind(this));
+        this.#root.querySelector('#tasksIncompleted').addEventListener('click', function(e) {
             if (e.target.classList.contains('_delete')) {
                 this.removeTask(e.target.closest('._li').dataset.index);
             }
         }.bind(this));
-
-        document.body.appendChild(this.#TEMPLATE_CURRENT);
-        this.#MODEL.on('change', this.#render.bind(this));
+        this.#model.on('change', this._renderList.bind(this));
+        return this;
     }
+
+    _render(template) {
+        document.body.appendChild(template);
+    }
+
+    _renderList() {
+        this.#root.querySelector('#tasksIncompleted').innerHTML = '';
+
+        this.#model.list.forEach((el, i) => {
+            const template= TODO.templateItem.cloneNode(true);
+            template.querySelector('._text').innerText = el;
+            template.querySelector('._li').dataset.index = i;
+            this.#root.querySelector('#tasksIncompleted').appendChild(template);
+        });
+    }
+
+    addTask(){
+        this.#model.add(this.#root.querySelector('#taskValue').value);
+    };
+
+    removeTask(index) {
+        this.#model.remove(index);
+    };
 }
 
+new TODO();
 new TODO();
