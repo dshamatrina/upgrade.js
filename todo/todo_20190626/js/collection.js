@@ -1,4 +1,5 @@
 import Events from './events.js';
+import { EVENT_CHANGE } from './dictionary.js';
 
 export default class Collection extends Events {
 
@@ -16,17 +17,17 @@ export default class Collection extends Events {
 
     add(string) {
         this.#collection.push(string);
-        this.trigger('change');
+        this.trigger(EVENT_CHANGE);
     }
 
     remove(index) {
         this.#collection.splice(index, 1);
-        this.trigger('change');
+        this.trigger(EVENT_CHANGE);
     }
 
     edit(index, string) {
         this.#collection[index] = string;
-        this.trigger('change');
+        this.trigger(EVENT_CHANGE);
     }
 
     get collection() {

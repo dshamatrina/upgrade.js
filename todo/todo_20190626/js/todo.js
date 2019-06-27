@@ -1,4 +1,5 @@
 import Collection from './collection.js';
+import { EVENT_CHANGE } from './dictionary.js';
 
 export default class TODO {
 
@@ -21,11 +22,15 @@ export default class TODO {
 
     _eventsAssign() {
         // TODO: rewrite events assign
-        this.#root.querySelector('#buttonAdd').addEventListener('click', this.addTask.bind(this));
+        this.#root.querySelector('#buttonAdd').addEventListener('click', function(e) {
+            _validateForm(e, this.#root.querySelector('.formAdd'), this.addTask.bind(this));
+            this.#root.querySelector('#taskValue').value = '';
+        }.bind(this));
 
         this.#root.querySelector('#taskValue').addEventListener('keydown', function(e){
             if (e.key == "Enter") {
-                this.addTask();
+                _validateForm(e, this.#root.querySelector('.formAdd'), this.addTask.bind(this));
+                this.#root.querySelector('#taskValue').value = '';
             }
         }.bind(this));
 
@@ -33,19 +38,26 @@ export default class TODO {
             if (e.target.classList.contains('_delete')) {
                 this.removeTask(e.target.closest('._li').dataset.index);
             } else if (e.target.classList.contains('_edit')) {
+                e.preventDefault();
                 this._renderListItem(e.target.closest('._li'));
             } else if (e.target.classList.contains('_save')) {
-                this.editTask(e.target);
+                _validateForm(e, this.#root.querySelector('.formEdit'), this.editTask(e.target).bind(this));
             }
         }.bind(this));
 
         this.#root.querySelector('#tasksIncompleted').addEventListener('keydown', function(e){
             if (e.key == "Enter") {
-                this.editTask(e.target);
+                _validateForm(e, this.#root.querySelector('.formEdit'), this.editTask(e.target).bind(this));
             } else if (e.key == "Escape") this._renderList();
         }.bind(this));
 
-        this.#model.on('change', this._renderList.bind(this));
+        function _validateForm(e, form, fn) {
+            if (!form.checkValidity()) return;
+            e.preventDefault();
+            fn();
+        }
+
+        this.#model.on(EVENT_CHANGE, this._renderList.bind(this));
 
         return this;
     }
@@ -65,17 +77,15 @@ export default class TODO {
         });
     }
 
-// TODO: rewrite
+// TODO: rewrite to class
     _renderListItem(item) {
-        item.querySelector('._input').style.display = 'block';
+        item.classList.add('editMode');
         item.querySelector('._input').value = item.querySelector('._text').innerText;
-        item.querySelector('._text').style.display = 'none';
         item.querySelector('._edit').classList.replace('_edit', '_save');
         item.querySelector('._save').innerText = 'Save';
     }
 
     addTask(){
-        if (!this.#root.querySelector('.form').checkValidity()) return;
         this.#model.add(this.#root.querySelector('#taskValue').value);
     }
 

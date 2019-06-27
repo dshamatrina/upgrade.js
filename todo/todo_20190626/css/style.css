@@ -29,9 +29,11 @@ button {
   color: #888;
   font-size: 15px;
   width: 60px;
-  margin: 10px 0 0;
   font-family: Lato, sans-serif;
   cursor: pointer;
+}
+button#buttonAdd {
+  margin: 10px 0 0;
 }
 button:hover {
   color: #333;
@@ -79,7 +81,6 @@ p > button:hover {
 /* Task list */
 li {
   display: flex;
-  justify-content: space-between;
   overflow: hidden;
   padding: 20px 0;
   border-bottom: 1px solid #eee;
@@ -89,11 +90,17 @@ li > input[type="checkbox"] {
   position: relative;
   top: 15px;
 }
-li > label {
+form.formEdit > label {
   font-size: 18px;
   line-height: 40px;
   flex: 1 1 auto;
   padding: 0 0 0 11px;
+}
+.formEdit {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 li >  input[type="text"] {
   width: 226px;

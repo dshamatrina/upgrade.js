@@ -10,27 +10,24 @@
 
   <template id="tplItem">
     <li class="_li">
-      <form>
+      <form class="formEdit">
         <input class="_input" type="text" pattern=".{4,}" required>
         <label class="_text"></label>
+        <div class="buttons">
+          <button class="_edit">Edit</button>
+          <button class="_delete">Delete</button>
+        </div>
       </form>
-      <div class="buttons">
-        <button class="_edit">Edit</button>
-        <button class="_delete">Delete</button>
-      </div>
     </li>
   </template>
 
   <template id="tplToDoList">
     <div class="container _root">
-
-      <form class="form">
+      <form class="formAdd">
         <label for="taskValue">Add Item</label>
         <input id="taskValue" type="text" pattern=".{4,}" required>
-        
+        <button id='buttonAdd'>Add</button>
       </form>
-      <button id='buttonAdd'>Add</button>
-
       <h3>Todo</h3>
       <ul id="tasksIncompleted"></ul>
     </div>
