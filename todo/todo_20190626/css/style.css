@@ -90,7 +90,7 @@ li > input[type="checkbox"] {
   position: relative;
   top: 15px;
 }
-form.formEdit > label {
+.formEdit > label {
   font-size: 18px;
   line-height: 40px;
   flex: 1 1 auto;

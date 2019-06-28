@@ -11,22 +11,31 @@ export default class Collection extends Events {
         super();
         if (Collection.instance) {
             return Collection.instance;
-        } 
+        }
         Collection.instance = this;
+
+        if (localStorage["myCollection"]) {
+            this.#collection = JSON.parse(localStorage.getItem("myCollection"));
+        } else {
+            localStorage.setItem("myCollection", JSON.stringify(this.#collection));
+        }
     }
 
     add(string) {
         this.#collection.push(string);
+        localStorage["myCollection"] = JSON.stringify(this.#collection);
         this.trigger(EVENT_CHANGE);
     }
 
     remove(index) {
         this.#collection.splice(index, 1);
+        localStorage["myCollection"] = JSON.stringify(this.#collection);
         this.trigger(EVENT_CHANGE);
     }
 
     edit(index, string) {
         this.#collection[index] = string;
+        localStorage["myCollection"] = JSON.stringify(this.#collection);
         this.trigger(EVENT_CHANGE);
     }
 

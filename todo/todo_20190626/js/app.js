@@ -1,4 +1,4 @@
 import TODO from './todo.js';
 
-new TODO();
-new TODO();
+new TODO({container: document.body});
+new TODO({container: document.body});

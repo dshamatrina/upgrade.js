@@ -8,73 +8,84 @@ export default class TODO {
 
     #model = new Collection();
 
-    // root element of template
     #root = null;
 
-    constructor() {
+    constructor(props = {}) {
 
         const template = TODO.templateToDo.cloneNode('true');
 
         this.#root = template.querySelector('._root');
+        let {container = document.body} = props;
         this._eventsAssign()
-        ._render(template);
+        ._render(container, template)
+        ._renderList();
+    }
+
+    $(selector) {
+        return this.#root.querySelector(selector);
     }
 
     _eventsAssign() {
         // TODO: rewrite events assign
-        this.#root.querySelector('#buttonAdd').addEventListener('click', function(e) {
-            _validateForm(e, this.#root.querySelector('.formAdd'), this.addTask.bind(this));
-            this.#root.querySelector('#taskValue').value = '';
+        this.$('#buttonAdd').addEventListener('click', function(e) {
+            _validateForm(e, this.$('.formAdd'));
+            this.addTask();
+            this.$('#taskValue').value = '';
         }.bind(this));
 
-        this.#root.querySelector('#taskValue').addEventListener('keydown', function(e){
+        this.$('#taskValue').addEventListener('keydown', function(e){
             if (e.key == "Enter") {
-                _validateForm(e, this.#root.querySelector('.formAdd'), this.addTask.bind(this));
-                this.#root.querySelector('#taskValue').value = '';
+                _validateForm(e, this.$('.formAdd'));
+                this.addTask();
+                this.$('#taskValue').value = '';
             }
         }.bind(this));
 
-        this.#root.querySelector('#tasksIncompleted').addEventListener('click', function(e) {
+        this.$('#tasksIncompleted').addEventListener('click', function(e) {
             if (e.target.classList.contains('_delete')) {
                 this.removeTask(e.target.closest('._li').dataset.index);
             } else if (e.target.classList.contains('_edit')) {
                 e.preventDefault();
                 this._renderListItem(e.target.closest('._li'));
             } else if (e.target.classList.contains('_save')) {
-                _validateForm(e, this.#root.querySelector('.formEdit'), this.editTask(e.target).bind(this));
+                _validateForm(e, this.$('.formEdit'));
+                this.editTask(e.target.closest('._li'));
             }
         }.bind(this));
 
-        this.#root.querySelector('#tasksIncompleted').addEventListener('keydown', function(e){
+        this.$('#tasksIncompleted').addEventListener('keydown', function(e){
             if (e.key == "Enter") {
-                _validateForm(e, this.#root.querySelector('.formEdit'), this.editTask(e.target).bind(this));
+                _validateForm(e, this.$('.formEdit'));
+                this.editTask(e.target.closest('._li'));
             } else if (e.key == "Escape") this._renderList();
         }.bind(this));
 
-        function _validateForm(e, form, fn) {
+        function _validateForm(e, form) {
             if (!form.checkValidity()) return;
             e.preventDefault();
-            fn();
-        }
+        };
 
         this.#model.on(EVENT_CHANGE, this._renderList.bind(this));
 
         return this;
     }
 
-    _render(template) {
-        document.body.appendChild(template);
+    _render(container, template) {
+        container.appendChild(template);
+        return this;
     }
 
     _renderList() {
-        this.#root.querySelector('#tasksIncompleted').innerHTML = '';
+        this.$('#tasksIncompleted').innerHTML = '';
+        let fragment = document.createDocumentFragment();
 
         this.#model.collection.forEach((el, i) => {
             const template= TODO.templateItem.cloneNode(true);
             template.querySelector('._text').innerText = el;
             template.querySelector('._li').dataset.index = i;
-            this.#root.querySelector('#tasksIncompleted').appendChild(template);
+            fragment.appendChild(template);
         });
+        this.$('#tasksIncompleted').appendChild(fragment);
     }
 
 // TODO: rewrite to class
@@ -86,15 +97,14 @@ export default class TODO {
     }
 
     addTask(){
-        this.#model.add(this.#root.querySelector('#taskValue').value);
+        this.#model.add(this.$('#taskValue').value);
     }
 
     removeTask(index) {
         this.#model.remove(index);
     }
 
-    editTask(event) {
-        let item = event.closest('._li');
+    editTask(item) {
         this.#model.edit(item.dataset.index, item.querySelector('._input').value);
     }
 }
