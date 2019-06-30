@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Todo App</title>
+  <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8">
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+
+  <template id="tplItem">
+    <li class="_li">
+      <form action="/" class="_form">
+        <input class="_input input" type="text" minlength="0" required>
+        <label class="_text text"></label>
+        <button type="submit" class="_save save">Save</button>
+        <button type="button" class="_edit edit">Edit</button>
+        <button type="button" class="_delete delete">Delete</button>
+      </form>
+    </li>
+  </template>
+
+  <template id="tplToDoList">
+    <div class="container _root">
+      <form action="/" class="form">
+        <label for="taskValue">Add Item</label>
+        <input id="taskValue" type="text" minlength="0" required>
+        <button id='buttonAdd'>Add</button>
+      </form>
+      <h3>Todo</h3>
+      <ul id="tasksIncompleted"></ul>
+    </div>
+  </template>
+
+</body>
+</html>
