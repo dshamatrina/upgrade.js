@@ -1,0 +1,16 @@
+.player {
+    width: 580px;
+    height: 440px;
+}
+.player_header {
+    background: #f86f05;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    height: 50px;
+}
+
+.player_footer {
+    background: #1b1f1c;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}

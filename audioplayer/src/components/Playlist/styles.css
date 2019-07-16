@@ -1,0 +1,19 @@
+.playlist {
+	background: white;
+	flex: 1 0 280px;
+	position: relative;
+}
+.playlist:after {
+	position: absolute;
+	content: '';
+	width: 100%;
+	height: 75px;
+	background: linear-gradient(#fff0, #fff);
+	top: calc(320px - 75px);
+	z-index: 1;
+	pointer-events: none;
+}
+.playlist_list {
+	height: 320px;
+	overflow: auto;
+}

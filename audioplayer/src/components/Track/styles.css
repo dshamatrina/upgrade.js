@@ -1,0 +1,32 @@
+.track {
+	flex: 1 0 300px;
+	padding: 30px 10px 0;
+	box-sizing: border-box;
+	text-align: center;
+	color: white;
+}
+.track_image {
+	width: 220px;
+	height: 220px;
+	border-radius: 10px;
+	margin-bottom: 5px;
+}
+.track_name {
+	font-size: 18px;
+	line-height: 30px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	width: 280px;
+	text-align: center;
+}
+.track_author {
+	font-size: 14px;
+	line-height: 22px;
+	color: #fff6;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	width: 280px;
+	text-align: center;
+}

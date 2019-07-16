@@ -1,0 +1,45 @@
+.item {
+	cursor: pointer;
+	display: flex;
+	width: 280px;
+	padding: 15px;
+	box-sizing: border-box;
+	font-size: 14px;
+	line-height: 20px;
+	transition: background-color 0.1s;
+}
+.item:nth-child(even) {
+	background: #0001;
+}
+.item:hover {
+	background: #0002;
+}
+.item_play {
+	opacity: 0;
+	transform: translateX(-5px);
+	display: flex;
+	align-items: center;
+}
+.item__playing .item_play .fa-pause,
+.item_play .fa-play {
+	display: none;
+}
+.item__playing .item_play .fa-play {
+	display: block;
+}
+.item__active .item_play {
+	transform: translateX(0);
+	opacity: 1;
+	transition-property: opacity, transform;
+	transition-duration: 0.2s;
+}
+.item_name {
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	margin: 0 10px;
+}
+.item_duration {
+	margin-left: auto;
+	color: #00000055;
+}

@@ -1,0 +1,70 @@
+.controls {
+    height: 50px;
+    align-items: center;
+    display: flex;
+    padding: 0 10px 0 30px;
+}
+
+.control {
+    border: 0;
+    padding: 0;
+    color: white;
+    background: transparent;
+    font-size: 24px;
+    cursor: pointer;
+    min-width: 40px;
+    text-align: center;
+    height: 100%;
+}
+.control:focus {
+    background: #fff1;
+    outline: 0;
+}
+.control__play {
+    min-width: 0;
+    width: 20px;
+}
+.control__play.control__active .fa-play,
+.control__play .fa-pause {
+    display: none;
+}
+.control__play.control__active .fa-pause  {
+    display: block;
+}
+.control__mute {font-size: 26px;}
+.control__random {font-size: 24px;}
+.control__repeat  {font-size: 22px;}
+.control__mute,
+.control__random,
+.control__repeat {
+    color: #fff6;    
+}
+.control__mute.control__active,
+.control__random.control__active,
+.control__repeat.control__active {
+    color: #d07d3c;    
+}
+
+.progress {
+    position: relative;
+    height: 20px;
+    width: 300px;
+    background: #fff2;
+    border-radius: 10px;
+    margin: 0 10px;
+    overflow: hidden;
+}
+.progress_value {
+    position: relative;
+    display: block;
+    height: 100%;
+    background: #f86f05;
+    z-index: 2;
+}
+.progress_buffered {
+    position: absolute;
+    display: block;
+    height: 100%;
+    background: #f86f0533;
+    z-index: 1;
+}

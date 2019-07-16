@@ -1,0 +1,12 @@
+html,
+body {
+    height: 100%;
+}
+
+body {
+    background: #67584d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font: 16px/1.2 'Montserrat', sans-serif;
+}
